@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block header %}
+{% if g.user %}
+<a class="action" href="{{ url_for('frogbook.create') }}">New</a>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+    {%if g.user %}
+    <h1>You have battled {{ g.user['battled'] }} frogs</h1>
+    {% else %}
+    <h1>Please <a href="{{ url_for('auth.login') }}">login</a> to battle frogs </h1>
+    {% endif %}
+
+{% endblock %}

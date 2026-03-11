@@ -23,6 +23,10 @@ An in-depth paragraph about your project and overview of use.
  
 * How/where to download your program
 * Any modifications needed to be made to files/folders
+
+```
+flask --app FrogBook init-db
+```
  
 ### Executing program
  
@@ -47,4 +51,5 @@ Benjamin Odell - benjamin.m.odell@proton.me
 ## Acknowledgments
  
 Inspiration, code snippets, etc.
-* [Flask Toturial](https://flask.palletsprojects.com/en/stable/tutorial/)
+* [Flask Tutorial](https://flask.palletsprojects.com/en/stable/tutorial/)
+* [Image Uploads](https://flask.palletsprojects.com/en/stable/patterns/fileuploads/)
