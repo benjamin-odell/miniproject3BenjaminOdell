@@ -15,3 +15,12 @@ CREATE TABLE post (
   body TEXT NOT NULL,
   FOREIGN KEY (author_id) REFERENCES user (id)
 );
+
+CREATE TABLE frog(
+    id integer primary key autoincrement,
+    user_id integer not null,
+    created timestamp not null default current_timestamp,
+    name TEXT not null,
+    img blob not null,
+    foreign key (user_id) references user (id)
+);
