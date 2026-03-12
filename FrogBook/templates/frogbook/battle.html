@@ -1,10 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block header %}
+<h1>{% block title %}Battle{% endblock %}</h1>
+{% endblock %}
+
+
+{% block content %}
+    {% if frog1 and frog2 %}
+    <form method="post">
+            <div class="battle-frog">
+                <p>{{ frog1["name"] }}</p>
+                <p>elo: {{ frog1["elo"] }}</p>
+                <img src="{{ frog1["img"] }}" alt="{{ frog1["name"] }}"/>
+                <input type="hidden" name="winner" value="{{ frog1['id'] }}">
+                <input type="hidden" name="loser" value="{{ frog2['id'] }}">
+                <input type="submit" value="{{ frog1['name'] }} is cuter">
+            </div>
+    </form>
+    <form method="post">
+            <div class="battle-frog">
+                <p>{{ frog2["name"] }}</p>
+                <p>elo: {{ frog2["elo"] }}</p>
+                <img src="{{ frog2["img"] }}" alt="{{ frog2["name"] }}"/>
+                <input type="hidden" name="loser" value="{{ frog1['id'] }}">
+                <input type="hidden" name="winner" value="{{ frog2['id'] }}">
+                <input type="submit" value="{{ frog2['name'] }} is cuter" >
+            </div>
+    </form>
+    {% else %}
+    <p>Not enough frogs to battle.</p>
+    {% endif %}
+{% endblock %}

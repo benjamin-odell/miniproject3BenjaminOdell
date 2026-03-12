@@ -1,5 +1,7 @@
 import base64
 import io
+import math
+import random
 
 from PIL import Image
 
@@ -36,6 +38,103 @@ def my_frogs():
         (g.user['id'],)
     ).fetchall()
     return render_template('frogbook/user_frogs.html', frogs=frogs)
+
+#get frog by id
+def get_frog(id, check_author=True):
+    db = get_db()
+    #get frog with id
+    frog = db.execute(
+        'SELECT * from frog WHERE id = ?', (id,)
+    ).fetchone()
+
+    #no frog was found
+    if frog is None:
+        abort(404, f"Frog id {id} doesn't exist.")
+
+    #loged in user is not the creator of the frog
+    if check_author and frog['user_id'] != g.user['id']:
+        abort(403)
+
+    return frog
+
+# Function to calculate the Probability
+def probability(rating1, rating2):
+    # Calculate and return the expected score
+    return 1.0 / (1 + math.pow(10, (rating1 - rating2) / 400.0))
+
+#battle route
+@bp.route('/battle', methods=('GET', 'POST'))
+@login_required
+def battle():
+    # get db
+    db = get_db()
+
+    if request.method == 'POST':
+
+        print(request.form['winner'])
+
+        winner_id = request.form['winner']
+        loser_id = request.form['loser']
+
+        print(winner_id, loser_id)
+
+        winner = get_frog(winner_id, False)
+        loser = get_frog(loser_id, False)
+
+
+
+        #elo calculation
+        winner_elo = winner['elo']
+        loser_elo = loser['elo']
+
+        #constant for elo calculation
+        K = 30
+
+        winner_elo += int(K * (1 - probability(loser_elo, winner_elo)))
+        loser_elo += int(K * (0 - probability(winner_elo, loser_elo)))
+
+        #update winner
+        db.execute(
+            'UPDATE frog SET elo = ?, wins = ?, battles = ? WHERE id = ?',
+            (winner_elo, winner['wins'] + 1, winner['battles'] + 1, winner_id)
+        )
+        db.commit()
+
+        #update loser
+        db.execute(
+            'UPDATE frog SET elo = ?, battles = ? WHERE id = ?',
+            (loser_elo, loser['battles'] + 1, loser_id)
+        )
+        db.commit()
+
+        #update user
+        db.execute(
+            'UPDATE user SET battles = ? WHERE id = ?',
+            (g.user['battles'] + 1,g.user['id'])
+        )
+
+        return redirect(url_for('frogbook.battle'))
+
+    #choose two frog for battle
+
+
+    #get all frogs not made by the user
+    frogs = db.execute(
+        'SELECT * FROM frog WHERE user_id != ?', (g.user['id'],)
+    ).fetchall()
+
+    #set frog1 and 2
+    frog1 = frog2 = None
+    #select 2 frogs
+    if frogs:
+        frog1 = random.choice(frogs)
+        frogs.remove(frog1)
+    if frogs:
+        frog2 = random.choice(frogs)
+
+    return render_template('frogbook/battle.html', frog1=frog1, frog2=frog2)
+
+
 
 #allowed file
 def allowed_file(filename, allowed_extensions):
