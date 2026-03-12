@@ -112,12 +112,14 @@ def battle():
             'UPDATE user SET battles = ? WHERE id = ?',
             (g.user['battles'] + 1,g.user['id'])
         )
+        db.commit()
 
         #add battle to the history
         db.execute(
-            'INSERT INTO battle_history (user_id, frog1_id, frog2_id, winner_id) VALUES (?, ?, ?, ?)',
+            'INSERT INTO battles (user_id, frog1_id, frog2_id, winner_id) VALUES (?, ?, ?, ?)',
             (g.user['id'], frog1, frog2, winner_id)
         )
+        db.commit()
 
         return redirect(url_for('frogbook.battle'))
 
@@ -252,22 +254,47 @@ def delete(id):
 @login_required
 def user_history():
     db = get_db()
-    history = db.execute(
-        'SELECT * FROM battle_history WHERE user_id = ? ORDER BY created DESC',
+    battles = db.execute(
+        'SELECT * FROM battles WHERE user_id = ? ORDER BY created DESC',
         (g.user['id'],)
     ).fetchall()
+
+    history = []
+    for battle in battles:
+        frog1 = get_frog(battle['frog1_id'])
+        frog2 = get_frog(battle['frog2_id'])
+        history.append({
+            'battle': battle,
+            'frog1': frog1,
+            'frog2': frog2
+        })
+
     return render_template('frogbook/user_history.html', history=history)
 
 #frog history
 @bp.route('/<int:id>/history')
 @login_required
-def user_battles(id):
+def frog_history(id):
     db = get_db()
 
     frog = get_frog(id)
 
-    history = db.execute(
-        'SELECT * from battle_history where frog1_id = ? OR frog2_id = ? ORDER BY created DESC',
+    battles = db.execute(
+        'SELECT * from battles where frog1_id = ? OR frog2_id = ? ORDER BY created DESC',
         (id,id)
     ).fetchall()
+
+    history = []
+    for battle in battles:
+        frog1 = get_frog(battle['frog1_id'])
+        frog2 = get_frog(battle['frog2_id'])
+
+        #gets the evil frog
+        evil_frog = get_frog(frog2['id'] if frog['id'] == frog1['id'] else frog1['id'])
+
+        history.append({
+            'battle': battle,
+            'evil_frog': evil_frog
+        })
+
     return render_template('frogbook/frog_history.html', history=history, frog=frog)

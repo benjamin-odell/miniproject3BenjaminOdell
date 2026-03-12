@@ -22,7 +22,9 @@
     <article>
     <p>{{ frog["name"] }}</p>
     <p>Elo: {{ frog["elo"] }}</p>
+        <h3><a href="{{ url_for('frogbook.frog_history', id=frog['id']) }}">view {{ frog['name'] }}'s history</a></h3>
     <img src="{{ frog["img"] }}" alt="{{ frog["name"] }}"/>
+
         <form method="post" action="{{ url_for('frogbook.delete', id=frog['id']) }}">
             <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
         </form>
