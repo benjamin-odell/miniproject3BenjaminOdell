@@ -1,5 +1,38 @@
+{% from frogbook import get_frog %}
 {% extends 'base.html' %}
 
 {% block header %}
 <h1>{% block title %}{{ g.user['username'] }}'s history{% endblock %}</h1>
+{% endblock %}
+
+<% block content %}
+    {% if history %}
+    {%for battle in history %}
+        <article>
+            <% frog1 = get_frog(battle['frog1_id']) %>
+            <% frog2 = get_frog(battle['frog2_id']) %>
+            <p>{{ battle['timestamp'] }}</p>
+            <div>
+                <p>{{ frog1['name'] }}</p>
+                <img src="{{ frog1['img'] }}" alt="{{ frog1['name'] }}"/>
+                {% if frog1['id'] == battle['winner_id'] %}
+                <p>Winner!</p>
+                {% else %}
+                <p>Loser</p>
+                {% endif %}
+            </div>
+            <div>
+                <p>{{ frog2['name'] }}</p>
+                <img src="{{ frog2['img'] }}" alt="{{ frog2['name'] }}"/>
+                {% if frog2['id'] == battle['winner_id'] %}
+                <p>Winner!</p>
+                {% else %}
+                <p>Loser</p>
+                {% endif %}
+            </div>
+        </article>
+    {% endfor %}
+    {% else %}
+    <p>You haven't battled yet</p>
+    {% endif %}
 {% endblock %}

@@ -51,10 +51,6 @@ def get_frog(id, check_author=True):
     if frog is None:
         abort(404, f"Frog id {id} doesn't exist.")
 
-    #loged in user is not the creator of the frog
-    if check_author and frog['user_id'] != g.user['id']:
-        abort(403)
-
     return frog
 
 # Function to calculate the Probability
@@ -78,8 +74,8 @@ def battle():
 
         print(winner_id, loser_id)
 
-        winner = get_frog(winner_id, False)
-        loser = get_frog(loser_id, False)
+        winner = get_frog(winner_id)
+        loser = get_frog(loser_id)
 
 
 
@@ -230,7 +226,11 @@ def update(id):
 @bp.route('/<int:id>/delete', methods=('POST',))
 @login_required
 def delete(id):
-    get_frog(id)
+    frog = get_frog(id)
+
+    #check if loged in user is the creator of the frog
+    if(frog['user_id'] != g.user['id']):
+        abort(403)
     db = get_db()
     db.execute('DELETE FROM frog WHERE id = ?', (id,))
     db.commit()
