@@ -53,3 +53,5 @@ Benjamin Odell - benjamin.m.odell@proton.me
 Inspiration, code snippets, etc.
 * [Flask Tutorial](https://flask.palletsprojects.com/en/stable/tutorial/)
 * [Image Uploads](https://flask.palletsprojects.com/en/stable/patterns/fileuploads/)
+* [Sqlite Blob](https://www.sqlitetutorial.net/sqlite-blob/)
+* [Elo Rating](https://www.geeksforgeeks.org/dsa/elo-rating-algorithm/)

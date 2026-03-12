@@ -1,7 +1,11 @@
+import base64
+import data_url
+
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for
 )
 from werkzeug.exceptions import abort
+from werkzeug.utils import secure_filename
 
 from FrogBook.auth import login_required
 from FrogBook.db import get_db
@@ -12,33 +16,50 @@ bp = Blueprint('frogbook', __name__)
 @bp.route('/')
 def index():
     db = get_db()
-    posts = db.execute(
-        'SELECT p.id, title, body, created, author_id, username'
-        ' FROM post p JOIN user u ON p.author_id = u.id'
+    frogs = db.execute(
+        'SELECT *'
+        ' FROM frog f JOIN user u ON f.user_id = u.id'
         ' ORDER BY created DESC'
     ).fetchall()
-    return render_template('frogbook/index.html', posts=posts)
 
+    for frog in frogs:
+        print(frog['img'])
+    return render_template('frogbook/index.html', frogs=frogs)
+
+#allowed file
+def allowed_file(filename, allowed_extensions):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in allowed_extensions
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
 def create():
+    allowed_extensions = ['png', 'jpg', 'jpeg', 'gif', 'bmp']
     if request.method == 'POST':
-        title = request.form['title']
-        body = request.form['body']
+        #set error to none
         error = None
+        name = request.form['name']
+        image = request.files['image']
 
-        if not title:
-            error = 'Title is required.'
+        if not name:
+            error = 'Name is required.'
+
+        if not image or image.filename == '':
+            error = 'Image is required.'
+        elif not allowed_file(image.filename, allowed_extensions):
+            error = 'Image extension is not allowed.'
 
         if error is not None:
             flash(error)
         else:
+            mime = image.mimetype
+            image = image.read()
+            image = base64.b64encode(image)
+            image = 'data:' + mime + ';base64,' + str(image)[2:-1]
             db = get_db()
             db.execute(
-                'INSERT INTO post (title, body, author_id)'
-                ' VALUES (?, ?, ?)',
-                (title, body, g.user['id'])
+                'INSERT INTO frog (name, user_id, img) VALUES (?, ?, ?)',
+                (name, g.user['id'], image)
             )
             db.commit()
             return redirect(url_for('frogbook.index'))

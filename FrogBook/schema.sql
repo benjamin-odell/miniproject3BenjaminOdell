@@ -22,6 +22,7 @@ CREATE TABLE frog(
     user_id integer not null,
     created timestamp not null default current_timestamp,
     name TEXT not null,
-    img blob not null,
+    img text not null,
+    elo integer not null default 1000,
     foreign key (user_id) references user (id)
 );
