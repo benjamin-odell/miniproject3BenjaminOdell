@@ -1,5 +1,7 @@
 import base64
-import data_url
+import io
+
+from PIL import Image
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for
@@ -21,9 +23,6 @@ def index():
         ' FROM frog f JOIN user u ON f.user_id = u.id'
         ' ORDER BY created DESC'
     ).fetchall()
-
-    for frog in frogs:
-        print(frog['img'])
     return render_template('frogbook/index.html', frogs=frogs)
 
 #allowed file
@@ -34,7 +33,7 @@ def allowed_file(filename, allowed_extensions):
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
 def create():
-    allowed_extensions = ['png', 'jpg', 'jpeg', 'gif', 'bmp']
+    allowed_extensions = ['png','jpg', 'jpeg']
     if request.method == 'POST':
         #set error to none
         error = None
@@ -52,8 +51,13 @@ def create():
         if error is not None:
             flash(error)
         else:
+            img = Image.open(image)
+            img.thumbnail((500,500))
+
             mime = image.mimetype
-            image = image.read()
+            buffer = io.BytesIO()
+            img.save(buffer, format=img.format)
+            image = buffer.getvalue()
             image = base64.b64encode(image)
             image = 'data:' + mime + ';base64,' + str(image)[2:-1]
             db = get_db()

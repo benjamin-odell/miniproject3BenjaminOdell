@@ -9,7 +9,7 @@
     <label for="name">Frog's Name</label>
     <input name="name" id="name" value="{{ request.form['name'] }}" required>
     <label for="image">Frog's Image</label>
-    <input type="file" name="image" id="image" value="{{ request.files['image'] }}" required>
+    <input type="file" name="image" id="image" value="{{ request.files['image'] }}" required accept="image/png, image/jpeg">
     <input type="submit" value="Save">
 </form>
 {% endblock %}
