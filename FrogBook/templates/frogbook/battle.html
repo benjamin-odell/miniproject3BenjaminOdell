@@ -1,41 +1,79 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<h1>{% block title %}Battle{% endblock %}</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>{% block title %}Battle{% endblock %}</h1>
+    </div>
 {% endblock %}
-
 
 {% block content %}
     {% if frog1 and frog2 %}
-    <form method="post">
-            <div class="battle-frog">
-                <p>{{ frog1["name"] }}</p>
-                <p>elo: {{ frog1["elo"] }}</p>
-                <img src="{{ frog1["img"] }}" alt="{{ frog1["name"] }}"/>
-
-                <input type="hidden" name="frog1" value="{{ frog1['id'] }}">
-                <input type="hidden" name="frog2" value="{{ frog2['id'] }}">
-
-                <input type="hidden" name="winner" value="{{ frog1['id'] }}">
-                <input type="hidden" name="loser" value="{{ frog2['id'] }}">
-                <input type="submit" value="{{ frog1['name'] }} is cuter">
+        <div class="row align-items-center">
+            <!-- Frog 1 -->
+            <div class="col-md-5 mb-4 mb-md-0">
+                <div class="card h-100 shadow text-center">
+                    <img src="{{ frog1['img'] }}"
+                         class="card-img-top"
+                         alt="{{ frog1['name'] }}"
+                         style="height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h3 class="card-title">{{ frog1['name'] }}</h3>
+                        <p class="card-text">
+                            <span class="badge bg-primary fs-6">Elo: {{ frog1['elo'] }}</span>
+                        </p>
+                        <form method="post">
+                            <input type="hidden" name="frog1" value="{{ frog1['id'] }}">
+                            <input type="hidden" name="frog2" value="{{ frog2['id'] }}">
+                            <input type="hidden" name="winner" value="{{ frog1['id'] }}">
+                            <input type="hidden" name="loser" value="{{ frog2['id'] }}">
+                            <button type="submit" class="btn btn-success btn-lg w-100">
+                                {{ frog1['name'] }} is cuter
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
-    </form>
-    <form method="post">
-            <div class="battle-frog">
-                <p>{{ frog2["name"] }}</p>
-                <p>elo: {{ frog2["elo"] }}</p>
-                <img src="{{ frog2["img"] }}" alt="{{ frog2["name"] }}"/>
 
-                <input type="hidden" name="frog1" value="{{ frog1['id'] }}">
-                <input type="hidden" name="frog2" value="{{ frog2['id'] }}">
-
-                <input type="hidden" name="loser" value="{{ frog1['id'] }}">
-                <input type="hidden" name="winner" value="{{ frog2['id'] }}">
-                <input type="submit" value="{{ frog2['name'] }} is cuter" >
+            <!-- VS Divider -->
+            <div class="col-md-2 text-center mb-4 mb-md-0">
+                <span class="display-4 fw-bold text-muted">VS</span>
             </div>
-    </form>
+
+            <!-- Frog 2 -->
+            <div class="col-md-5">
+                <div class="card h-100 shadow text-center">
+                    <img src="{{ frog2['img'] }}"
+                         class="card-img-top"
+                         alt="{{ frog2['name'] }}"
+                         style="height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h3 class="card-title">{{ frog2['name'] }}</h3>
+                        <p class="card-text">
+                            <span class="badge bg-primary fs-6">Elo: {{ frog2['elo'] }}</span>
+                        </p>
+                        <form method="post">
+                            <input type="hidden" name="frog1" value="{{ frog1['id'] }}">
+                            <input type="hidden" name="frog2" value="{{ frog2['id'] }}">
+                            <input type="hidden" name="winner" value="{{ frog2['id'] }}">
+                            <input type="hidden" name="loser" value="{{ frog1['id'] }}">
+                            <button type="submit" class="btn btn-success btn-lg w-100">
+                                {{ frog2['name'] }} is cuter
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% else %}
-    <p>Not enough frogs to battle.</p>
+        <div class="alert alert-warning" role="alert">
+            <h4 class="alert-heading">Not enough frogs to battle!</h4>
+            <p>You need at least two frogs to start a battle.
+               {% if g.user %}
+                   <a href="{{ url_for('frogbook.create') }}" class="alert-link">Create a new frog</a> or wait for other users to add more.
+               {% else %}
+                   <a href="{{ url_for('auth.login') }}" class="alert-link">Log in</a> to create your own frogs.
+               {% endif %}
+            </p>
+        </div>
     {% endif %}
 {% endblock %}

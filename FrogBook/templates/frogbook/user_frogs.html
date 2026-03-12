@@ -1,35 +1,99 @@
 {% extends 'base.html' %}
 
 {% block header %}
-     <h1>{% block title %}Your frogs{% endblock %}</h1>
-{% if g.user %}
-<a class="action" href="{{ url_for('frogbook.create') }}">New</a>
-{% endif %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>{% block title %}Your frogs{% endblock %}</h1>
+        {% if g.user %}
+            <a class="btn btn-primary" href="{{ url_for('frogbook.create') }}">+ New Frog</a>
+        {% endif %}
+    </div>
 {% endblock %}
 
 {% block content %}
-    {%if g.user %}
-    <h1>You have battled {{ g.user['battled'] }} frogs</h1>
-    {% else %}
-    <h1>Please <a href="{{ url_for('auth.login') }}">login</a> to battle frogs </h1>
-    {% endif %}
-
+    <!-- No frogs message -->
     {% if not frogs %}
-    <h1>You have no frogs yet</h1>
+        <div class="alert alert-secondary" role="alert">
+            <p class="mb-0">You have no frogs yet. Click the "New Frog" button to create one!</p>
+        </div>
     {% endif %}
 
-    {% for frog in frogs %}
-    <article>
-    <p>{{ frog["name"] }}</p>
-    <p>Elo: {{ frog["elo"] }}</p>
-        <h3><a href="{{ url_for('frogbook.frog_history', id=frog['id']) }}">view {{ frog['name'] }}'s history</a></h3>
-    <img src="{{ frog["img"] }}" alt="{{ frog["name"] }}"/>
+    <!-- Frog grid -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for frog in frogs %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <!-- Frog image -->
+                    <img src="{{ frog['img'] }}"
+                         class="card-img-top"
+                         alt="{{ frog['name'] }}"
+                         style="height: 200px; object-fit: cover;">
 
-        <form method="post" action="{{ url_for('frogbook.delete', id=frog['id']) }}">
-            <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
-        </form>
-    </article>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ frog['name'] }}</h5>
+                        <p class="card-text">
+                            <span class="badge bg-success">Elo: {{ frog['elo'] }}</span>
+                        </p>
+                        <a href="{{ url_for('frogbook.frog_history', id=frog['id']) }}"
+                           class="btn btn-sm btn-outline-primary">
+                            View History
+                        </a>
+                    </div>
 
-    {% endfor %}
+                    <div class="card-footer bg-transparent border-top-0">
+                        <!-- Delete button (triggers modal) -->
+                        <button type="button"
+                                class="btn btn-sm btn-danger delete-frog-btn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteModal"
+                                data-frog-name="{{ frog['name'] }}"
+                                data-delete-url="{{ url_for('frogbook.delete', id=frog['id']) }}">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 
+    <!-- Delete Confirmation Modal (static backdrop, no keyboard dismiss) -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+         data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                    <!-- No close button (X) to force choice -->
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete <strong id="deleteFrogName"></strong>? This action cannot be undone.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form id="deleteForm" method="post" action="" style="display: inline;">
+                        <input type="submit" class="btn btn-danger" value="Delete">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set up the modal with frog-specific data when delete button is clicked
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteButtons = document.querySelectorAll('.delete-frog-btn');
+            const deleteModal = document.getElementById('deleteModal');
+            const deleteFrogNameSpan = document.getElementById('deleteFrogName');
+            const deleteForm = document.getElementById('deleteForm');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const frogName = this.getAttribute('data-frog-name');
+                    const deleteUrl = this.getAttribute('data-delete-url');
+
+                    deleteFrogNameSpan.textContent = frogName;
+                    deleteForm.action = deleteUrl;
+                });
+            });
+        });
+    </script>
 {% endblock %}

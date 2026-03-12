@@ -1,35 +1,65 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<h1>{% block title %}{{ g.user['username'] }}'s history{% endblock %}</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>{% block title %}{{ g.user['username'] }}'s history{% endblock %}</h1>
+    </div>
 {% endblock %}
 
 {% block content %}
     {% if history %}
-    {%for b in history %}
-        <article>
-            <p>{{ b['battle']['timestamp'] }}</p>
-            <div>
-                <p>{{ b['frog1']['name'] }}</p>
-                <img src="{{ b['frog1']['img'] }}" alt="{{ b['frog1']['name'] }}"/>
-                {% if b['frog1']['id'] == b['battle']['winner_id'] %}
-                <p>Winner!</p>
-                {% else %}
-                <p>Loser</p>
-                {% endif %}
-            </div>
-            <div>
-                <p>{{ b['frog2']['name'] }}</p>
-                <img src="{{ b['frog2']['img'] }}" alt="{{ b['frog2']['name'] }}"/>
-                {% if b['frog2']['id'] == b['battle']['winner_id'] %}
-                <p>Winner!</p>
-                {% else %}
-                <p>Loser</p>
-                {% endif %}
-            </div>
-        </article>
-    {% endfor %}
+        <div class="row g-4">
+            {% for b in history %}
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-light">
+                            <small class="text-muted">{{ b['battle']['timestamp'] }}</small>
+                        </div>
+                        <div class="card-body">
+                            <div class="row align-items-center text-center">
+                                <!-- Frog 1 -->
+                                <div class="col-md-5 mb-3 mb-md-0">
+                                    <div class="position-relative">
+                                        <img src="{{ b['frog1']['img'] }}"
+                                             alt="{{ b['frog1']['name'] }}"
+                                             class="img-fluid rounded" style="max-height: 150px;">
+                                        <h5 class="mt-2">{{ b['frog1']['name'] }}</h5>
+                                        {% if b['frog1']['id'] == b['battle']['winner_id'] %}
+                                            <span class="badge bg-success position-absolute top-0 start-0">Winner!</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary position-absolute top-0 start-0">Loser</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <!-- VS divider -->
+                                <div class="col-md-2">
+                                    <span class="fw-bold fs-4">VS</span>
+                                </div>
+
+                                <!-- Frog 2 -->
+                                <div class="col-md-5">
+                                    <div class="position-relative">
+                                        <img src="{{ b['frog2']['img'] }}"
+                                             alt="{{ b['frog2']['name'] }}"
+                                             class="img-fluid rounded" style="max-height: 150px;">
+                                        <h5 class="mt-2">{{ b['frog2']['name'] }}</h5>
+                                        {% if b['frog2']['id'] == b['battle']['winner_id'] %}
+                                            <span class="badge bg-success position-absolute top-0 end-0">Winner!</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary position-absolute top-0 end-0">Loser</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     {% else %}
-    <p>You haven't battled yet</p>
+        <div class="alert alert-info" role="alert">
+            <p class="mb-0">You haven't battled yet. Head over to the <a href="{{ url_for('frogbook.battle') }}" class="alert-link">Battle page</a> to start!</p>
+        </div>
     {% endif %}
 {% endblock %}
