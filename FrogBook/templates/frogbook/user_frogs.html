@@ -1,16 +1,23 @@
 {% extends 'base.html' %}
 
-
-
 {% block header %}
-    <h1>{% block title %}Home{% endblock %}</h1>
+     <h1>{% block title %}Your frogs{% endblock %}</h1>
 {% if g.user %}
 <a class="action" href="{{ url_for('frogbook.create') }}">New</a>
 {% endif %}
 {% endblock %}
 
 {% block content %}
-    <h1>Top Frogs In The World</h1>
+    {%if g.user %}
+    <h1>You have battled {{ g.user['battled'] }} frogs</h1>
+    {% else %}
+    <h1>Please <a href="{{ url_for('auth.login') }}">login</a> to battle frogs </h1>
+    {% endif %}
+
+    {% if not frogs %}
+    <h1>You have no frogs yet</h1>
+    {% endif %}
+
     {% for frog in frogs %}
     <article>
     <p>{{ frog["name"] }}</p>
@@ -21,6 +28,7 @@
     <a href="{{ url_for('frogbook.delete', id=frog['id'], user_id = g.user['id']) }}">Delete</a>
     {% endif %}
     </article>
+
     {% endfor %}
 
 {% endblock %}

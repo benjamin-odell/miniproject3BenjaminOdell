@@ -25,6 +25,18 @@ def index():
     ).fetchall()
     return render_template('frogbook/index.html', frogs=frogs)
 
+@bp.route('/my_frogs')
+@login_required
+def my_frogs():
+    db = get_db()
+    frogs = db.execute(
+        'SELECT *'
+        ' FROM frog f JOIN user u ON f.user_id = u.id'
+        ' WHERE f.user_id = ?',
+        (g.user['id'],)
+    ).fetchall()
+    return render_template('frogbook/user_frogs.html', frogs=frogs)
+
 #allowed file
 def allowed_file(filename, allowed_extensions):
     return '.' in filename and \
