@@ -18,9 +18,6 @@
                          style="height: 250px; object-fit: cover;">
                     <div class="card-body">
                         <h3 class="card-title">{{ frog1['name'] }}</h3>
-                        <p class="card-text">
-                            <span class="badge bg-primary fs-6">Elo: {{ frog1['elo'] }}</span>
-                        </p>
                         <form method="post">
                             <input type="hidden" name="frog1" value="{{ frog1['id'] }}">
                             <input type="hidden" name="frog2" value="{{ frog2['id'] }}">
@@ -48,9 +45,6 @@
                          style="height: 250px; object-fit: cover;">
                     <div class="card-body">
                         <h3 class="card-title">{{ frog2['name'] }}</h3>
-                        <p class="card-text">
-                            <span class="badge bg-primary fs-6">Elo: {{ frog2['elo'] }}</span>
-                        </p>
                         <form method="post">
                             <input type="hidden" name="frog1" value="{{ frog1['id'] }}">
                             <input type="hidden" name="frog2" value="{{ frog2['id'] }}">
