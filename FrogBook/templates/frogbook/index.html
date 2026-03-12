@@ -16,10 +16,6 @@
     <p>{{ frog["name"] }}</p>
     <p>Elo: {{ frog["elo"] }}</p>
     <img src="{{ frog["img"] }}" alt="{{ frog["name"] }}"/>
-    {% if g.user['id'] == frog['user_id'] %}
-
-    <a href="{{ url_for('frogbook.delete', id=frog['id'], user_id = g.user['id']) }}">Delete</a>
-    {% endif %}
     </article>
     {% endfor %}
 

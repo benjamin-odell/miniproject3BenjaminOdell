@@ -23,10 +23,9 @@
     <p>{{ frog["name"] }}</p>
     <p>Elo: {{ frog["elo"] }}</p>
     <img src="{{ frog["img"] }}" alt="{{ frog["name"] }}"/>
-    {% if g.user['id'] == frog['user_id'] %}
-
-    <a href="{{ url_for('frogbook.delete', id=frog['id'], user_id = g.user['id']) }}">Delete</a>
-    {% endif %}
+        <form method="post" action="{{ url_for('frogbook.delete', id=frog['id']) }}">
+            <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+        </form>
     </article>
 
     {% endfor %}

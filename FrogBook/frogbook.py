@@ -230,8 +230,8 @@ def update(id):
 @bp.route('/<int:id>/delete', methods=('POST',))
 @login_required
 def delete(id):
-    get_post(id)
+    get_frog(id)
     db = get_db()
-    db.execute('DELETE FROM post WHERE id = ?', (id,))
+    db.execute('DELETE FROM frog WHERE id = ?', (id,))
     db.commit()
-    return redirect(url_for('frogbook.index'))
+    return redirect(url_for('frogbook.my_frogs'))
