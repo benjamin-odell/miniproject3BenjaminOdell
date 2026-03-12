@@ -235,3 +235,29 @@ def delete(id):
     db.execute('DELETE FROM frog WHERE id = ?', (id,))
     db.commit()
     return redirect(url_for('frogbook.my_frogs'))
+
+
+#user history
+@bp.route('/history')
+@login_required
+def user_history():
+    db = get_db()
+    history = db.execute(
+        'SELECT * FROM battle_history WHERE user_id = ? ORDER BY created DESC',
+        (g.user['id'],)
+    ).fetchall()
+    return render_template('frogbook/user_history.html', history=history)
+
+#frog history
+@bp.route('/<int:id>/history')
+@login_required
+def user_battles(id):
+    db = get_db()
+
+    frog = get_frog(id)
+
+    history = db.execute(
+        'SELECT * from battle_history where frog1_id = ? OR frog2_id = ? ORDER BY created DESC',
+        (id,id)
+    ).fetchall()
+    return render_template('frogbook/frog_history.html', history=history, frog=frog)
