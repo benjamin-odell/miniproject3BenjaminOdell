@@ -72,11 +72,15 @@ def battle():
         winner_id = request.form['winner']
         loser_id = request.form['loser']
 
+        frog1 = request.form['frog1']
+        frog2 = request.form['frog2']
+
         print(winner_id, loser_id)
 
         winner = get_frog(winner_id)
         loser = get_frog(loser_id)
-
+        get_frog(frog1)
+        get_frog(frog2)
 
 
         #elo calculation
@@ -107,6 +111,12 @@ def battle():
         db.execute(
             'UPDATE user SET battles = ? WHERE id = ?',
             (g.user['battles'] + 1,g.user['id'])
+        )
+
+        #add battle to the history
+        db.execute(
+            'INSERT INTO battle_history (user_id, frog1_id, frog2_id, winner_id) VALUES (?, ?, ?, ?)',
+            (g.user['id'], frog1, frog2, winner_id)
         )
 
         return redirect(url_for('frogbook.battle'))

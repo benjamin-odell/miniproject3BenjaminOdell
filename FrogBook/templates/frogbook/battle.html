@@ -12,6 +12,10 @@
                 <p>{{ frog1["name"] }}</p>
                 <p>elo: {{ frog1["elo"] }}</p>
                 <img src="{{ frog1["img"] }}" alt="{{ frog1["name"] }}"/>
+
+                <input type="hidden" name="frog1" value="{{ frog1['id'] }}">
+                <input type="hidden" name="frog2" value="{{ frog2['id'] }}">
+
                 <input type="hidden" name="winner" value="{{ frog1['id'] }}">
                 <input type="hidden" name="loser" value="{{ frog2['id'] }}">
                 <input type="submit" value="{{ frog1['name'] }} is cuter">
@@ -22,6 +26,10 @@
                 <p>{{ frog2["name"] }}</p>
                 <p>elo: {{ frog2["elo"] }}</p>
                 <img src="{{ frog2["img"] }}" alt="{{ frog2["name"] }}"/>
+
+                <input type="hidden" name="frog1" value="{{ frog1['id'] }}">
+                <input type="hidden" name="frog2" value="{{ frog2['id'] }}">
+
                 <input type="hidden" name="loser" value="{{ frog1['id'] }}">
                 <input type="hidden" name="winner" value="{{ frog2['id'] }}">
                 <input type="submit" value="{{ frog2['name'] }} is cuter" >
