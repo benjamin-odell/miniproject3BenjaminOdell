@@ -54,5 +54,5 @@ Inspiration, code snippets, etc.
 * [Image Uploads](https://flask.palletsprojects.com/en/stable/patterns/fileuploads/)
 * [Sqlite Blob](https://www.sqlitetutorial.net/sqlite-blob/)
 * [Elo Rating](https://www.geeksforgeeks.org/dsa/elo-rating-algorithm/)
-* [Deep Seek (Used for the Bootstrap)](https://chat.deepseek.com/share/17zn657qymh2q466yy)
+* [Deep Seek Chat (Used for the Bootstrap)](https://chat.deepseek.com/share/xiy2usts4yok1httx0)
 * [Google Image Downloader](https://www.geeksforgeeks.org/python/how-to-download-google-images-using-python/)
