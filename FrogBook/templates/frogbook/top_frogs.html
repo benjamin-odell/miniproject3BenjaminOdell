@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>{% block title %}Home{% endblock %}</h1>
+        {% if g.user %}
+            <a class="btn btn-primary" href="{{ url_for('frogbook.create') }}">+ New Frog</a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block content %}
+    <h2 class="mb-4">Top Frogs In The World</h2>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for frog in frogs %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="{{ frog['img'] }}" class="card-img-top frog-img" alt="{{ frog['name'] }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ frog['name'] }}</h5>
+                        <p class="card-text">
+                            <span class="badge bg-success">Elo: {{ frog['elo'] }}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

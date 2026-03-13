@@ -10,21 +10,70 @@
 {% endblock %}
 
 {% block content %}
-    <h2 class="mb-4">Top Frogs In The World</h2>
+    <!-- Video Hero Section -->
+    <div class="card bg-dark text-white mb-5 overflow-hidden" style="border: none;">
+        <div class="ratio ratio-16x9">
+            <video autoplay loop muted playsinline>
+                <source src="{{ url_for('static', filename='home_video.mp4') }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="card-img-overlay d-flex flex-column justify-content-center text-center bg-dark bg-opacity-50">
+            <h1 class="display-4 fw-bold">FrogBook</h1>
+            <p class="lead">The cutest battleground on the web</p>
+            <div>
+                {% if not g.user %}
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg me-2">Join Now</a>
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg">Log In</a>
+                {% else %}
+                    <a href="{{ url_for('frogbook.battle') }}" class="btn btn-success btn-lg me-2">Start a Battle</a>
+                    <a href="{{ url_for('frogbook.my_frogs') }}" class="btn btn-outline-light btn-lg">My Frogs</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {% for frog in frogs %}
-            <div class="col">
-                <div class="card h-100 shadow-sm">
-                    <img src="{{ frog['img'] }}" class="card-img-top frog-img" alt="{{ frog['name'] }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ frog['name'] }}</h5>
-                        <p class="card-text">
-                            <span class="badge bg-success">Elo: {{ frog['elo'] }}</span>
-                        </p>
-                    </div>
+    <!-- Welcome Message -->
+    <div class="text-center mb-5">
+        {% if g.user %}
+            <h2 class="display-6">Hello, {{ g.user['username'] }}! 👋</h2>
+            <p class="lead">Ready to make your frog the cutest?</p>
+        {% else %}
+            <h2 class="display-6">Welcome to FrogBook! 🐸</h2>
+            <p class="lead">Here you can battle frogs and see who's the cutest in the world.</p>
+        {% endif %}
+        <a href="{{ url_for('frogbook.top_frogs') }}" class="btn btn-outline-primary btn-lg">View Top Frogs →</a>
+    </div>
+
+    <!-- Features Section -->
+    <h2 class="text-center mb-4">How It Works</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+        <div class="col">
+            <div class="card h-100 shadow-sm text-center">
+                <div class="card-body">
+                    <i class="bi bi-upload" style="font-size: 3rem; color: #0d6efd;"></i>
+                    <h5 class="card-title mt-3">1. Add Your Frog</h5>
+                    <p class="card-text">Upload a cute picture and give your frog a name. Every frog starts with 1000 Elo.</p>
                 </div>
             </div>
-        {% endfor %}
+        </div>
+        <div class="col">
+            <div class="card h-100 shadow-sm text-center">
+                <div class="card-body">
+                    <i class="bi bi-trophy" style="font-size: 3rem; color: #198754;"></i>
+                    <h5 class="card-title mt-3">2. Battle</h5>
+                    <p class="card-text">Challenge other frogs. Users vote for the cuter one – winners gain Elo, losers lose some.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 shadow-sm text-center">
+                <div class="card-body">
+                    <i class="bi bi-bar-chart" style="font-size: 3rem; color: #ffc107;"></i>
+                    <h5 class="card-title mt-3">3. Climb the Ranks</h5>
+                    <p class="card-text">The frog with the highest Elo becomes the cutest in the world. Check the leaderboard!</p>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

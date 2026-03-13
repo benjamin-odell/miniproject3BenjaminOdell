@@ -16,16 +16,19 @@ from FrogBook.db import get_db
 
 bp = Blueprint('frogbook', __name__)
 
-
 @bp.route('/')
 def index():
+    return render_template('frogbook/index.html')
+
+@bp.route('/top_frogs')
+def top_frogs():
     db = get_db()
     frogs = db.execute(
         'SELECT *'
         ' FROM frog f JOIN user u ON f.user_id = u.id'
         ' ORDER BY elo DESC'
-    ).fetchmany(size=10)
-    return render_template('frogbook/index.html', frogs=frogs)
+    ).fetchmany(size=12)
+    return render_template('frogbook/top_frogs.html', frogs=frogs)
 
 @bp.route('/my_frogs')
 @login_required
