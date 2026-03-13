@@ -21,9 +21,9 @@ pip install -r requirements.txt
 ### Installing
  
 
-Download the frog images from [here](https://drive.proton.me/urls/YS66YMPTA8#t4xeitK0PU3Y)
-Extract the images into a folder called downloaded_frogs. This folder should be in the root prject folder. miniproject3BenjaminOdell
-This folder must contain all the frog images.
+Download the frog images from [here](https://drive.proton.me/urls/YS66YMPTA8#t4xeitK0PU3Y).<br>
+Extract the images into a folder called downloaded_frogs.<br> This folder should be in the root project folder: miniproject3BenjaminOdell <br>
+The folder downloaded_frogs must contain all the frog images.<br>
 
 Run this command to initilise the database
 ```
