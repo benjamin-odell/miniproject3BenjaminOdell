@@ -25,7 +25,7 @@ Download the frog images from [here](https://drive.proton.me/urls/YS66YMPTA8#t4x
 Extract the images into a folder called downloaded_frogs.<br> This folder should be in the root project folder: miniproject3BenjaminOdell <br>
 The folder downloaded_frogs must contain all the frog images.<br>
 
-Run this command to initilise the database
+Run this command to initialize the database.
 ```
 flask --app FrogBook init-db
 ```
