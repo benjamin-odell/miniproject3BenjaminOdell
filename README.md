@@ -21,9 +21,11 @@ pip install -r requirements.txt
 ### Installing
  
 
-Download the frog images from [here](https://drive.proton.me/urls/YS66YMPTA8#t4xeitK0PU3Y).<br>
+Download the frog images from [here](https://drive.google.com/drive/folders/1JWgFTMmFs9X4cwBKa0DIlRWsXCjhCvyY?usp=sharing).<br>
 Extract the images into a folder called downloaded_frogs.<br> This folder should be in the root project folder: miniproject3BenjaminOdell <br>
 The folder downloaded_frogs must contain all the frog images.<br>
+
+There is also a frog_scrapper.py file that I used to get the frog images. You can run it if my link doesn't work.
 
 Run this command to initialize the database.
 ```
@@ -56,3 +58,4 @@ Inspiration, code snippets, etc.
 * [Elo Rating](https://www.geeksforgeeks.org/dsa/elo-rating-algorithm/)
 * [Deep Seek Chat (Used for the Bootstrap)](https://chat.deepseek.com/share/xiy2usts4yok1httx0)
 * [Google Image Downloader](https://www.geeksforgeeks.org/python/how-to-download-google-images-using-python/)
+* [Frog Images](https://enjoythewild.com/types-of-frogs/)
