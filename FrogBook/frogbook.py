@@ -37,7 +37,8 @@ def my_frogs():
     frogs = db.execute(
         'SELECT *'
         ' FROM frog f JOIN user u ON f.user_id = u.id'
-        ' WHERE f.user_id = ?',
+        ' WHERE f.user_id = ?'
+        ' ORDER BY elo DESC',
         (g.user['id'],)
     ).fetchall()
     return render_template('frogbook/user_frogs.html', frogs=frogs)

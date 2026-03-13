@@ -2,9 +2,11 @@
 
 {% block header %}
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>{% block title %}Your frogs{% endblock %}</h1>
+        <h1>{% block title %}Your Frogs{% endblock %}</h1>
         {% if g.user %}
-            <a class="btn btn-primary" href="{{ url_for('frogbook.create') }}">+ New Frog</a>
+            <a class="btn btn-primary" href="{{ url_for('frogbook.create') }}">
+                <i class="bi bi-plus-circle"></i> New Frog
+            </a>
         {% endif %}
     </div>
 {% endblock %}
@@ -13,7 +15,8 @@
     <!-- No frogs message -->
     {% if not frogs %}
         <div class="alert alert-secondary" role="alert">
-            <p class="mb-0">You have no frogs yet. Click the "New Frog" button to create one!</p>
+            <i class="bi bi-info-circle"></i>
+            You have no frogs yet. Click the "New Frog" button to create one!
         </div>
     {% endif %}
 
@@ -22,33 +25,65 @@
         {% for frog in frogs %}
             <div class="col">
                 <div class="card h-100 shadow-sm">
-                    <!-- Frog image -->
-                    <img src="{{ frog['img'] }}"
-                         class="card-img-top"
-                         alt="{{ frog['name'] }}"
-                         style="height: 200px; object-fit: cover;">
-
-                    <div class="card-body">
-                        <h5 class="card-title">{{ frog['name'] }}</h5>
-                        <p class="card-text">
-                            <span class="badge bg-success">Elo: {{ frog['elo'] }}</span>
-                        </p>
-                        <a href="{{ url_for('frogbook.frog_history', id=frog['id']) }}"
-                           class="btn btn-sm btn-outline-primary">
-                            View History
-                        </a>
+                    <!-- Frog image with gradient overlay for text -->
+                    <div class="position-relative">
+                        <img src="{{ frog['img'] }}"
+                             class="card-img-top"
+                             alt="{{ frog['name'] }}"
+                             style="height: 200px; object-fit: cover;">
+                        <div class="position-absolute bottom-0 start-0 w-100 p-2 bg-dark bg-opacity-50 text-white">
+                            <h5 class="mb-0">{{ frog['name'] }}</h5>
+                        </div>
                     </div>
 
-                    <div class="card-footer bg-transparent border-top-0">
-                        <!-- Delete button (triggers modal) -->
-                        <button type="button"
-                                class="btn btn-sm btn-danger delete-frog-btn"
-                                data-bs-toggle="modal"
-                                data-bs-target="#deleteModal"
-                                data-frog-name="{{ frog['name'] }}"
-                                data-delete-url="{{ url_for('frogbook.delete', id=frog['id']) }}">
-                            Delete
-                        </button>
+                    <div class="card-body">
+                        <!-- Stats row with icons -->
+                        <div class="d-flex justify-content-between mb-2">
+                            <span><i class="bi bi-trophy-fill text-warning"></i> Elo:</span>
+                            <span class="badge bg-success rounded-pill">{{ frog['elo'] }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span><i class="bi bi-check-circle-fill text-success"></i> Wins:</span>
+                            <span class="badge bg-primary rounded-pill">{{ frog['wins'] }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span><i class="bi bi-shield-shaded"></i> Battles:</span>
+                            <span class="badge bg-secondary rounded-pill">{{ frog['battles'] }}</span>
+                        </div>
+
+                        <!-- Win rate progress bar -->
+                        {% if frog['battles'] > 0 %}
+                            {% set win_rate = (frog['wins'] / frog['battles'] * 100) | round %}
+                            <div class="mb-3">
+                                <small class="text-muted">Win Rate: {{ win_rate }}%</small>
+                                <div class="progress" style="height: 6px;">
+                                    <div class="progress-bar bg-success" style="width: {{ win_rate }}%;"></div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="mb-3">
+                                <small class="text-muted">No battles yet</small>
+                                <div class="progress" style="height: 6px;">
+                                    <div class="progress-bar" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!-- Action buttons -->
+                        <div class="d-flex gap-2">
+                            <a href="{{ url_for('frogbook.frog_history', id=frog['id']) }}"
+                               class="btn btn-sm btn-outline-primary flex-grow-1">
+                                <i class="bi bi-clock-history"></i> History
+                            </a>
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-danger delete-frog-btn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal"
+                                    data-frog-name="{{ frog['name'] }}"
+                                    data-delete-url="{{ url_for('frogbook.delete', id=frog['id']) }}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -62,15 +97,17 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                    <!-- No close button (X) to force choice -->
                 </div>
                 <div class="modal-body">
+                    <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
                     Are you sure you want to delete <strong id="deleteFrogName"></strong>? This action cannot be undone.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <form id="deleteForm" method="post" action="" style="display: inline;">
-                        <input type="submit" class="btn btn-danger" value="Delete">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
                     </form>
                 </div>
             </div>

@@ -2,7 +2,6 @@ import base64
 import io
 import os
 import click
-import random
 
 from PIL import Image
 from faker import Faker
@@ -50,7 +49,7 @@ def seed_database():
             image = 'data:' + mime + ';base64,' + str(image)[2:-1]
             db.execute(
                 'INSERT INTO frog (name, user_id, img, elo) VALUES (?, ?, ?, ?)',
-                (fake.first_name(), 1, image, random.randint(500,1500))
+                (fake.first_name(), 1, image, 1000)
             )
             db.commit()
 
