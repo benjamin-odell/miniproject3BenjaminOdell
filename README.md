@@ -5,43 +5,41 @@
  
 # FrogBook
  
-This is a basic self host website for you to rank frogs by how cute they are
- 
-## Description
- 
-An in-depth paragraph about your project and overview of use.
+This is a basic self-hosted website for you to rank frogs by how cute they are
  
 ## Getting Started
  
 ### Dependencies
- 
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
-* List pip install instructions.
+
+Install the required python packages using the following command
+
+```angular2html
+pip install -r requirements.txt
+```
+
  
 ### Installing
  
-* How/where to download your program
-* Any modifications needed to be made to files/folders
 
+Download the frog images from [here](https://drive.proton.me/urls/YS66YMPTA8#t4xeitK0PU3Y)
+Place in miniproject3BejnaminOdell folder not in the FrogBook folder
+
+Run this command to initilise the database
 ```
 flask --app FrogBook init-db
+```
+Run this command to seed the database with the frog images
+```angular2html
+flask --app FrogBook seed-database
 ```
  
 ### Executing program
  
-* How to run the program
-* Step-by-step bullets
+To run the app use the command
+```angular2html
+flask --app FrogBook run
 ```
-code blocks for commands
-```
- 
-## Help
- 
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
+The app will be running on [http://127.0.0.1:5000](http://127.0.0.1:5000)
  
 ## Authors
  
@@ -56,3 +54,4 @@ Inspiration, code snippets, etc.
 * [Sqlite Blob](https://www.sqlitetutorial.net/sqlite-blob/)
 * [Elo Rating](https://www.geeksforgeeks.org/dsa/elo-rating-algorithm/)
 * [Deep Seek (Used for the Bootstrap)](https://chat.deepseek.com/share/17zn657qymh2q466yy)
+* [Google Image Downloader](https://www.geeksforgeeks.org/python/how-to-download-google-images-using-python/)
