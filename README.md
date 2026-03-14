@@ -43,6 +43,22 @@ To run the app use the command
 flask --app FrogBook run
 ```
 The app will be running on [http://127.0.0.1:5000](http://127.0.0.1:5000)
+
+## Tips
+
+### Admin acocount
+There is an admin account:<br>
+username: ADMIN<br>
+password: root<br>
+
+This is the account with all the frogs in it.
+
+### Frog Battles
+
+A user may not battle their own frogs. 
+
+
+
  
 ## Authors
  
